@@ -1,11 +1,13 @@
 package com.parkinglot.beans;
-public class ParkingLot implements Bean{
+public class ParkingLot {
     long Id;
     String name;
     String displayName;
-    boolean isOccupied;
+    boolean isOccupied = false;
     ParkingLotType parkingLotType;
     long lotPlanId;
+    double xDistance;
+    double yDistance;
 
     public long getId() {
         return Id;
@@ -53,5 +55,31 @@ public class ParkingLot implements Bean{
 
     public void setLotPlanId(long lotPlanId) {
         this.lotPlanId = lotPlanId;
+    }
+
+    public double getxDistance() {
+        return xDistance;
+    }
+
+    public void setxDistance(double xDistance) {
+        this.xDistance = xDistance;
+    }
+
+    public double getyDistance() {
+        return yDistance;
+    }
+
+    public void setyDistance(double yDistance) {
+        this.yDistance = yDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingLot{" +
+                "Id=" + Id +
+                ", isOccupied=" + isOccupied +
+                ", xDistance=" + xDistance +
+                ", yDistance=" + yDistance +
+                '}';
     }
 }

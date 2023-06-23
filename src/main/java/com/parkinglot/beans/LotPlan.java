@@ -1,5 +1,5 @@
 package com.parkinglot.beans;
-public class LotPlan implements Bean{
+public class LotPlan {
     long Id;
     String name;
     String displayName;
@@ -27,4 +27,11 @@ public class LotPlan implements Bean{
         this.displayName = displayName;
     }
 
+    @Override
+    public String toString() {
+        return "LotPlan{" +
+                "Id=" + Id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

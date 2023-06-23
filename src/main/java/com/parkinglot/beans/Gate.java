@@ -7,6 +7,8 @@ public class Gate {
     boolean isOpen;
     GateType gateType;
     long lotPlanId;
+    double xDistance;
+    double yDistance;
     public long getId() {
         return Id;
     }
@@ -55,4 +57,31 @@ public class Gate {
         this.lotPlanId = lotPlanId;
     }
 
+    public double getxDistance() {
+        return xDistance;
+    }
+
+    public void setxDistance(double xDistance) {
+        this.xDistance = xDistance;
+    }
+
+    public double getyDistance() {
+        return yDistance;
+    }
+
+    public void setyDistance(double yDistance) {
+        this.yDistance = yDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "Gate{" +
+                "Id=" + Id +
+                ", displayName='" + displayName + '\'' +
+                ", isOpen=" + isOpen +
+                ", gateType=" + gateType +
+                ", xDistance=" + xDistance +
+                ", yDistance=" + yDistance +
+                '}';
+    }
 }

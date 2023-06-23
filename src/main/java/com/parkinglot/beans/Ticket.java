@@ -1,6 +1,6 @@
 package com.parkinglot.beans;
 
-public class Ticket implements Bean{
+public class Ticket {
     long Id;
     long userId;
     long parkingLotId;

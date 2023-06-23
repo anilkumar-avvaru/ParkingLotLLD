@@ -1,6 +1,6 @@
 package com.parkinglot.beans;
 
-public class User implements Bean{
+public class User {
     long Id;
     String name;
     String displayName;
