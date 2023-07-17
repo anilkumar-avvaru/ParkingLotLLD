@@ -30,7 +30,13 @@ public class ParkingLotContext { //This will be shared across the application
         parkingLotConfigMap = new ConcurrentHashMap<Long, AtomicBoolean>();
     }
 
-    private static void destroy(){
+    public static void destroy(){
+        //terminate all the running threads
+        for(Long entryGateId : workerThreadPool.keySet()){
+            workerThreadPool.get(entryGateId).stop();
+        }
+
+        //set the single-ton instance to null
         parkingLotContext = null;
     }
 

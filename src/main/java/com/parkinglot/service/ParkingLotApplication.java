@@ -1,6 +1,8 @@
 package com.parkinglot.service;
 import com.parkinglot.beans.*;
 import com.parkinglot.context.ParkingLotContext;
+import com.parkinglot.util.JSONUtils;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ public class ParkingLotApplication {
     }
 
     public static Configuration getDefaultPlan(){
+        //TODO: The code base currently works on the assumption that all parking lots are of same type
+        //      Need to make changes later to work for all types of vehicles
         Configuration configuration = new Configuration();
 
         List<Gate> entryGates = new ArrayList<Gate>();
@@ -81,8 +85,19 @@ public class ParkingLotApplication {
     public static void startApplication(){
         Configuration configuration = getDefaultPlan();
         System.out.println(configuration);
+        startApplication(configuration);
+    }
 
+    public static void startApplication(JSONObject configurationJSON){
+        Configuration configuration = JSONUtils.transformConfiguration(configurationJSON);
+        startApplication(configuration);
+    }
+
+    public static void startApplication(Configuration configuration){
         ParkingLotContext.getContext().loadConfiguration(configuration);
+    }
 
+    public static void stopApplication(){
+        ParkingLotContext.getContext().destroy();
     }
 }

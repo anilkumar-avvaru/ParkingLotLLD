@@ -18,6 +18,7 @@ public class WorkerResource {
     public WorkerResource(List<ParkingLot> selectionOrder){
         this.selectionOrder = selectionOrder;
         resourceConfig = new BitSet(selectionOrder.size()); //false --> the parking lot is free.    //true --> it is occupied
+        orderToIndices = new HashMap<Long, Integer>();
         messageQueue = new LinkedList<BroadcastMessage>();
         lock = new AtomicBoolean(false);
         int counter = 0;

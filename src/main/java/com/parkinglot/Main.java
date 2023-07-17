@@ -8,5 +8,7 @@ import com.parkinglot.service.ParkingLotApplication;
 public class Main {
     public static void main(String[] args) {
         ParkingLotApplication.startApplication();
+        //TODO: write the scripts to run the tests
+        ParkingLotApplication.stopApplication();
     }
 }
