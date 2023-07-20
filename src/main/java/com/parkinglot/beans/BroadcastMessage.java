@@ -1,7 +1,5 @@
 package com.parkinglot.beans;
 
-import org.json.JSONObject;
-
 public class BroadcastMessage {
     private ParkingLot parkingLot;
     private BroadcastAction broadcastAction;

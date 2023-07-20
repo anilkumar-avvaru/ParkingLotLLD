@@ -79,4 +79,14 @@ public class JSONUtils {
 
         return configuration;
     }
+
+    public static JSONObject parseJSON(String jsonString){
+        JSONObject parsedJson = null;
+        try{
+            parsedJson = new JSONObject(jsonString);
+        }catch (Exception ex){
+
+        }
+        return parsedJson;
+    }
 }

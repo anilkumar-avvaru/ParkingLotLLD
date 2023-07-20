@@ -73,6 +73,9 @@ public class WorkerResource {
 
     public ParkingLot getOptimalParkingLot(){
         readMessages();
+        if(optimalParkingLotIndex >= selectionOrder.size()){ //Return NULL if all parkinglots are occupied
+            return null;
+        }
         ParkingLot optimalParkingLot = selectionOrder.get(optimalParkingLotIndex);
         return optimalParkingLot;
     }

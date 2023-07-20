@@ -1,17 +1,16 @@
 package com.parkinglot.threads;
 
-import com.parkinglot.beans.BroadcastAction;
-import com.parkinglot.beans.BroadcastMessage;
-import com.parkinglot.beans.ParkingLot;
+import com.parkinglot.beans.*;
+import com.parkinglot.dao.ParkingLotsDAO;
 import com.parkinglot.service.WorkerResource;
 import com.parkinglot.context.ParkingLotContext;
 
 public class WorkerThread extends Thread implements Runnable{
-    private boolean lock = false;
-    private long resourceId; //entry gate ID
-    public WorkerThread(long resourceId)
-    {
-        this.resourceId = resourceId;
+    private long resourceId = -1; //entry gate ID
+    private long parkingLotId = -1; //vacating parking Lot
+
+    public WorkerThread(){
+        super();
     }
 
     public long getResourceId() {
@@ -22,16 +21,18 @@ public class WorkerThread extends Thread implements Runnable{
         this.resourceId = resourceId;
     }
 
-    public void setLock() {
-        lock = true;
+    public long getParkingLotId() {
+        return parkingLotId;
     }
 
-    public void unsetLock() {
-        lock = false;
+    public void setParkingLotId(long parkingLotId) {
+        this.parkingLotId = parkingLotId;
     }
 
-    public boolean isLocked() {
-        return lock;
+    public void reset(){
+        this.resourceId = -1;
+        this.parkingLotId = -1;
+        ParkingLotContext.getContext().addIntoWorkerThreadQueue(this);
     }
 
     private ParkingLot getOptimalParkingLot() throws Exception{
@@ -46,7 +47,7 @@ public class WorkerThread extends Thread implements Runnable{
         ParkingLot optimalParkingLot = workerResource.getOptimalParkingLot();
         workerResource.unsetLock();
         if(optimalParkingLot == null){
-            //no solution
+            throw new Exception("THE PARKING LOT IS FULL!!!");
         }
         return optimalParkingLot;
     }
@@ -58,14 +59,21 @@ public class WorkerThread extends Thread implements Runnable{
         // 4) Update the current state map
         // 5) Create a ticket for this {User:ParkingLot} pair  [TODO: Need to handle this when ticket flow is implemented]
         // 6) wait for next vehicle to enter
-        setLock();
         try{
-            ParkingLot optimalParkingLot = getOptimalParkingLot();
-            ParkingLotContext.getContext().broadcast(new BroadcastMessage(optimalParkingLot, BroadcastAction.OCCUPY));
-            ParkingLotContext.getContext().setConfig(optimalParkingLot.getId(), true);
+            if(parkingLotId == -1){
+                ParkingLot optimalParkingLot = getOptimalParkingLot();
+                ParkingLotContext.getContext().broadcast(new BroadcastMessage(optimalParkingLot, BroadcastAction.OCCUPY));
+                ParkingLotContext.getContext().setConfig(optimalParkingLot.getId(), true);
+                setParkingLotId(optimalParkingLot.getId());
+                System.out.println("[OK] ::: The vehicle can be parked at "+optimalParkingLot.getDisplayName());
+            }else{
+                ParkingLot vacatingParkingLot = ParkingLotsDAO.getParkingLotById(parkingLotId);
+                ParkingLotContext.getContext().broadcast(new BroadcastMessage(vacatingParkingLot, BroadcastAction.VACATE));
+                ParkingLotContext.getContext().setConfig(vacatingParkingLot.getId(), false);
+                System.out.println("[OK] ::: The vehicle parked at "+vacatingParkingLot.getDisplayName()+" has left and the parkinglot is now vacant");
+            }
         }catch (Exception ex){
-
+            System.out.println("[ERROR] ::: All parkinglots are occupied");
         }
-        unsetLock();
     }
 }

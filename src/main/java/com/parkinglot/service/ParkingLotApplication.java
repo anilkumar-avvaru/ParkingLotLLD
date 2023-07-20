@@ -54,25 +54,25 @@ public class ParkingLotApplication {
         LotPlan lotPlan = createLotPlan(1, "lot-plan-1", "Anil Parking Lot");
         configuration.setLotPlan(lotPlan);
 
-        Gate entryGate1 = createGate(11, "entry-gate-1", "Entry Gate 1", true, GateType.ENTRY, 1, 0, 0);
-        Gate entryGate2 = createGate(12, "entry-gate-2", "Entry Gate 2", true, GateType.ENTRY, 1, 0, 6);
-        Gate entryGate3 = createGate(13, "entry-gate-3", "Entry Gate 3", true, GateType.ENTRY, 1, 5, 8);
+        Gate entryGate1 = createGate(11, "entry-gate-1", "Entry Gate 1", true, GateType.ENTRY, 1, 0, 0.5);
+        Gate entryGate2 = createGate(12, "entry-gate-2", "Entry Gate 2", true, GateType.ENTRY, 1, 0, 4.5);
+        Gate entryGate3 = createGate(13, "entry-gate-3", "Entry Gate 3", true, GateType.ENTRY, 1, 2.5, 5);
         entryGates.add(entryGate1);
         entryGates.add(entryGate2);
         entryGates.add(entryGate3);
         configuration.setEntryGates(entryGates);
 
-        Gate exitGate1 = createGate(31, "exit-gate-1", "Exit Gate 1", true, GateType.EXIT, 1, 7, 5);
-        Gate exitGate2 = createGate(32, "exit-gate-2", "Exit Gate 2", true, GateType.EXIT, 1, 7, 0);
+        Gate exitGate1 = createGate(31, "exit-gate-1", "Exit Gate 1", true, GateType.EXIT, 1, 0, 2.5);
+        Gate exitGate2 = createGate(32, "exit-gate-2", "Exit Gate 2", true, GateType.EXIT, 1, 5, 2.5);
         exitGates.add(exitGate1);
         exitGates.add(exitGate2);
         configuration.setExitGates(exitGates);
 
         int idCounter = 101;
-        for(int i=2; i<=5; i++){
-            for(int j=3; j<=6; j++){
+        for(int i=1; i<5; i++){
+            for(int j=1; j<5; j++){
                 String nameSuffix = Integer.toString(idCounter);
-                ParkingLot parkingLot = createParkingLot(idCounter, "parking-lot-"+nameSuffix, "Parking Lot "+nameSuffix, false, ParkingLotType.TWO_WHEELER, 1, i, j);
+                ParkingLot parkingLot = createParkingLot(idCounter, "parking-lot-"+nameSuffix, "Parking Lot "+nameSuffix, false, ParkingLotType.TWO_WHEELER, 1, j, i);
                 parkingLots.add(parkingLot);
                 idCounter++;
             }
@@ -89,8 +89,12 @@ public class ParkingLotApplication {
     }
 
     public static void startApplication(JSONObject configurationJSON){
-        Configuration configuration = JSONUtils.transformConfiguration(configurationJSON);
-        startApplication(configuration);
+        if(configurationJSON == null){
+            Configuration configuration = JSONUtils.transformConfiguration(configurationJSON);
+            startApplication(configuration);
+        }else{
+            startApplication();
+        }
     }
 
     public static void startApplication(Configuration configuration){
