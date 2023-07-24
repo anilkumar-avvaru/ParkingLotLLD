@@ -3,5 +3,5 @@ package com.parkinglot.beans;
 public class Ticket {
     long Id;
     long userId;
-    long parkingLotId;
+    long spotId;
 }

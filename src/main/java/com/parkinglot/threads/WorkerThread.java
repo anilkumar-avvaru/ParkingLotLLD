@@ -1,7 +1,7 @@
 package com.parkinglot.threads;
 
 import com.parkinglot.beans.*;
-import com.parkinglot.dao.ParkingLotsDAO;
+import com.parkinglot.dao.SpotsDAO;
 import com.parkinglot.service.WorkerResource;
 import com.parkinglot.context.ParkingLotContext;
 
@@ -35,45 +35,45 @@ public class WorkerThread extends Thread implements Runnable{
         ParkingLotContext.getContext().addIntoWorkerThreadQueue(this);
     }
 
-    private ParkingLot getOptimalParkingLot() throws Exception{
+    private Spot getOptimalSpot() throws Exception{
         WorkerResource workerResource = ParkingLotContext.getContext().getWorkerResource(resourceId);
         if(workerResource.isLocked()){
             //sleep for 100 milliseconds and wait till the lock is unset
             //TODO: this might lead to StackOverflowError. Need to optimise this later
             this.sleep(100);
-            getOptimalParkingLot();
+            getOptimalSpot();
         }
         workerResource.setLock();
-        ParkingLot optimalParkingLot = workerResource.getOptimalParkingLot();
+        Spot optimalSpot = workerResource.getOptimalSpot();
         workerResource.unsetLock();
-        if(optimalParkingLot == null){
+        if(optimalSpot == null){
             throw new Exception("THE PARKING LOT IS FULL!!!");
         }
-        return optimalParkingLot;
+        return optimalSpot;
     }
 
     @Override public void run() {
         // 1) start
-        // 2) Fetch the optimal parkingLot for the incoming vehicle
-        // 3) Broadcast the message that the parkingLot is reserved
-        // 4) Update the current state map
-        // 5) Create a ticket for this {User:ParkingLot} pair  [TODO: Need to handle this when ticket flow is implemented]
+        // 2) Fetch the optimal spot for the incoming vehicle
+        // 3) Broadcast the message that the spot is reserved
+        // 4) Update the spots config map
+        // 5) Create a ticket for this {User:Spot} pair  [TODO: Need to handle this when ticket flow is implemented]
         // 6) wait for next vehicle to enter
         try{
             if(parkingLotId == -1){
-                ParkingLot optimalParkingLot = getOptimalParkingLot();
-                ParkingLotContext.getContext().broadcast(new BroadcastMessage(optimalParkingLot, BroadcastAction.OCCUPY));
-                ParkingLotContext.getContext().setConfig(optimalParkingLot.getId(), true);
-                setParkingLotId(optimalParkingLot.getId());
-                System.out.println("[OK] ::: The vehicle can be parked at "+optimalParkingLot.getDisplayName());
+                Spot optimalSpot = getOptimalSpot();
+                ParkingLotContext.getContext().broadcast(new BroadcastMessage(optimalSpot, BroadcastAction.OCCUPY));
+                ParkingLotContext.getContext().setSpotConfig(optimalSpot.getId(), true);
+                setParkingLotId(optimalSpot.getId());
+                System.out.println("[OK] ::: The vehicle can be parked at "+optimalSpot.getDisplayName());
             }else{
-                ParkingLot vacatingParkingLot = ParkingLotsDAO.getParkingLotById(parkingLotId);
-                ParkingLotContext.getContext().broadcast(new BroadcastMessage(vacatingParkingLot, BroadcastAction.VACATE));
-                ParkingLotContext.getContext().setConfig(vacatingParkingLot.getId(), false);
-                System.out.println("[OK] ::: The vehicle parked at "+vacatingParkingLot.getDisplayName()+" has left and the parkinglot is now vacant");
+                Spot vacatingSpot = SpotsDAO.getSpotById(parkingLotId);
+                ParkingLotContext.getContext().broadcast(new BroadcastMessage(vacatingSpot, BroadcastAction.VACATE));
+                ParkingLotContext.getContext().setSpotConfig(vacatingSpot.getId(), false);
+                System.out.println("[OK] ::: The vehicle parked at "+vacatingSpot.getDisplayName()+" has left and the spot is now vacant");
             }
         }catch (Exception ex){
-            System.out.println("[ERROR] ::: All parkinglots are occupied");
+            System.out.println("[ERROR] ::: All spots are occupied");
         }
     }
 }

@@ -6,7 +6,7 @@ public class Configuration {
     public LotPlan lotPlan;
     public List<Gate> entryGates;
     public List<Gate> exitGates;
-    public List<ParkingLot> parkingLots;
+    public List<Spot> spots;
 
     public LotPlan getLotPlan() {
         return lotPlan;
@@ -32,12 +32,12 @@ public class Configuration {
         this.exitGates = exitGates;
     }
 
-    public List<ParkingLot> getParkingLots() {
-        return parkingLots;
+    public List<Spot> getSpots() {
+        return spots;
     }
 
-    public void setParkingLots(List<ParkingLot> parkingLots) {
-        this.parkingLots = parkingLots;
+    public void setSpots(List<Spot> spots) {
+        this.spots = spots;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Configuration {
                 "\nlotPlan=" + lotPlan +
                 ",\n entryGates=" + entryGates +
                 ",\n exitGates=" + exitGates +
-                ",\n parkingLots=" + parkingLots +
+                ",\n spots=" + spots +
                 "\n}";
     }
 }

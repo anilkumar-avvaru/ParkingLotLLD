@@ -1,20 +1,20 @@
 package com.parkinglot.beans;
 
 public class BroadcastMessage {
-    private ParkingLot parkingLot;
+    private Spot spot;
     private BroadcastAction broadcastAction;
 
-    public BroadcastMessage(ParkingLot parkingLot, BroadcastAction broadcastAction){
-        this.parkingLot = parkingLot;
+    public BroadcastMessage(Spot spot, BroadcastAction broadcastAction){
+        this.spot = spot;
         this.broadcastAction = broadcastAction;
     }
 
-    public ParkingLot getParkingLot() {
-        return parkingLot;
+    public Spot getSpot() {
+        return spot;
     }
 
-    public void setParkingLot(ParkingLot parkingLot) {
-        this.parkingLot = parkingLot;
+    public void setSpot(Spot spot) {
+        this.spot = spot;
     }
 
     public BroadcastAction getBroadcastAction() {

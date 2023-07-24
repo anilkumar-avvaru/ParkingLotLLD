@@ -52,30 +52,30 @@ public class JSONUtils {
         configuration.setExitGates(exitGates);
 
         JSONArray parkingLotsArr = configurationJson.getJSONArray("parking_lots");
-        List<ParkingLot> parkingLots = new ArrayList<ParkingLot>();
+        List<Spot> spots = new ArrayList<Spot>();
         for(int i=0; i<parkingLotsArr.length(); i++){
             JSONObject parkingLotJson = parkingLotsArr.getJSONObject(i);
-            ParkingLot parkingLot = new ParkingLot();
-            parkingLot.setId(parkingLotJson.getLong("id"));
-            parkingLot.setName(parkingLotJson.getString("name"));
-            parkingLot.setDisplayName(parkingLotJson.getString("display_name"));
-            parkingLot.setOccupied(parkingLotJson.getBoolean("is_occupied"));
-            parkingLot.setxDistance(parkingLotJson.getDouble("x_distance"));
-            parkingLot.setyDistance(parkingLotJson.getDouble("y_distance"));
-            String parkingLotType = parkingLotJson.getString("parking_lot_type");
-            if("two_wheeler".equals(parkingLotType)){
-                parkingLot.setParkingLotType(ParkingLotType.TWO_WHEELER);
-            } else if ("four_wheeler".equals(parkingLotType)) {
-                parkingLot.setParkingLotType(ParkingLotType.FOUR_WHEELER);
-            } else if ("truck".equals(parkingLotType)) {
-                parkingLot.setParkingLotType(ParkingLotType.TRUCK);
+            Spot spot = new Spot();
+            spot.setId(parkingLotJson.getLong("id"));
+            spot.setName(parkingLotJson.getString("name"));
+            spot.setDisplayName(parkingLotJson.getString("display_name"));
+            spot.setOccupied(parkingLotJson.getBoolean("is_occupied"));
+            spot.setxDistance(parkingLotJson.getDouble("x_distance"));
+            spot.setyDistance(parkingLotJson.getDouble("y_distance"));
+            String spotType = parkingLotJson.getString("spot_type");
+            if("two_wheeler".equals(spotType)){
+                spot.setSpotType(SpotType.TWO_WHEELER);
+            } else if ("four_wheeler".equals(spotType)) {
+                spot.setSpotType(SpotType.FOUR_WHEELER);
+            } else if ("truck".equals(spotType)) {
+                spot.setSpotType(SpotType.TRUCK);
             } else {
                 continue;
             }
-            parkingLot.setLotPlanId(lotPlan.getId());
-            parkingLots.add(parkingLot);
+            spot.setLotPlanId(lotPlan.getId());
+            spots.add(spot);
         }
-        configuration.setParkingLots(parkingLots);
+        configuration.setSpots(spots);
 
         return configuration;
     }

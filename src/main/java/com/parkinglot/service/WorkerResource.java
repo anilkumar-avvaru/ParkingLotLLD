@@ -2,34 +2,34 @@ package com.parkinglot.service;
 
 import com.parkinglot.beans.BroadcastAction;
 import com.parkinglot.beans.BroadcastMessage;
-import com.parkinglot.beans.ParkingLot;
+import com.parkinglot.beans.Spot;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WorkerResource {
     private AtomicBoolean lock;
-    private int optimalParkingLotIndex;
-    private List<ParkingLot> selectionOrder;
+    private int optimalSpotIndex;
+    private List<Spot> selectionOrder;
     private BitSet resourceConfig;
     private HashMap<Long, Integer> orderToIndices;
     public Queue<BroadcastMessage> messageQueue;
 
-    public WorkerResource(List<ParkingLot> selectionOrder){
+    public WorkerResource(List<Spot> selectionOrder){
         this.selectionOrder = selectionOrder;
         resourceConfig = new BitSet(selectionOrder.size()); //false --> the parking lot is free.    //true --> it is occupied
         orderToIndices = new HashMap<Long, Integer>();
         messageQueue = new LinkedList<BroadcastMessage>();
         lock = new AtomicBoolean(false);
         int counter = 0;
-        for(ParkingLot parkingLot : selectionOrder){
-            orderToIndices.put(parkingLot.getId(), counter++);
+        for(Spot spot : selectionOrder){
+            orderToIndices.put(spot.getId(), counter++);
         }
-        for(ParkingLot parkingLot : selectionOrder){
-            int index = orderToIndices.get(parkingLot.getId());
-            resourceConfig.set(index, parkingLot.isOccupied());
+        for(Spot spot : selectionOrder){
+            int index = orderToIndices.get(spot.getId());
+            resourceConfig.set(index, spot.isOccupied());
         }
-        optimalParkingLotIndex = resourceConfig.nextClearBit(0);
+        optimalSpotIndex = resourceConfig.nextClearBit(0);
     }
 
     public void setLock() {
@@ -44,19 +44,19 @@ public class WorkerResource {
         return lock.get();
     }
 
-    public void occupyParkingLot(ParkingLot parkingLot){
-        int idx = orderToIndices.get(parkingLot.getId());
+    public void occupyParkingLot(Spot spot){
+        int idx = orderToIndices.get(spot.getId());
         resourceConfig.set(idx, true);
-        if(idx == optimalParkingLotIndex){
-            optimalParkingLotIndex = resourceConfig.nextClearBit(idx);
+        if(idx == optimalSpotIndex){
+            optimalSpotIndex = resourceConfig.nextClearBit(idx);
         }
     }
 
-    public void vacateParkingLot(ParkingLot parkingLot){
-        int idx = orderToIndices.get(parkingLot.getId());
+    public void vacateParkingLot(Spot spot){
+        int idx = orderToIndices.get(spot.getId());
         resourceConfig.set(idx, false);
-        if((idx < optimalParkingLotIndex) || (optimalParkingLotIndex == -1)){
-            optimalParkingLotIndex = idx;
+        if((idx < optimalSpotIndex) || (optimalSpotIndex == -1)){
+            optimalSpotIndex = idx;
         }
     }
 
@@ -64,27 +64,27 @@ public class WorkerResource {
         while(!messageQueue.isEmpty()){
             BroadcastMessage broadcastMessage = messageQueue.poll();
             if(broadcastMessage.getBroadcastAction() == BroadcastAction.OCCUPY){
-                occupyParkingLot(broadcastMessage.getParkingLot());
+                occupyParkingLot(broadcastMessage.getSpot());
             } else if (broadcastMessage.getBroadcastAction() == BroadcastAction.VACATE){
-                vacateParkingLot(broadcastMessage.getParkingLot());
+                vacateParkingLot(broadcastMessage.getSpot());
             }
         }
     }
 
-    public ParkingLot getOptimalParkingLot(){
+    public Spot getOptimalSpot(){
         readMessages();
-        if(optimalParkingLotIndex >= selectionOrder.size()){ //Return NULL if all parkinglots are occupied
+        if(optimalSpotIndex >= selectionOrder.size()){ //Return NULL if all parkinglots are occupied
             return null;
         }
-        ParkingLot optimalParkingLot = selectionOrder.get(optimalParkingLotIndex);
-        return optimalParkingLot;
+        Spot optimalSpot = selectionOrder.get(optimalSpotIndex);
+        return optimalSpot;
     }
 
-    public List<ParkingLot> getSelectionOrder() {
+    public List<Spot> getSelectionOrder() {
         return selectionOrder;
     }
 
-    public void setSelectionOrder(List<ParkingLot> selectionOrder) {
+    public void setSelectionOrder(List<Spot> selectionOrder) {
         this.selectionOrder = selectionOrder;
     }
 

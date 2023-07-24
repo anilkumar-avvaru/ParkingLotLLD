@@ -1,6 +1,6 @@
 package com.parkinglot.util;
 
-import com.parkinglot.beans.ParkingLot;
+import com.parkinglot.beans.Spot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,18 +13,18 @@ public class CommonUtils {
         double right = Math.abs(x2-y2);
         return Math.sqrt((left*left)+(right*right));
     }
-    public static List<ParkingLot> orderParkingLotsByDistances(List<ParkingLot> parkingLots, double x, double y){
+    public static List<Spot> orderParkingLotsByDistances(List<Spot> spots, double x, double y){
         //sort the parkingLots by distances from (x,y)
         class Pair{
-            ParkingLot parkingLot;
+            Spot spot;
             double distance;
-            Pair(ParkingLot parkingLot, double distance){
-                this.parkingLot = parkingLot;
+            Pair(Spot spot, double distance){
+                this.spot = spot;
                 this.distance = distance;
             }
 
-            public ParkingLot getParkingLot(){
-                return parkingLot;
+            public Spot getSpot(){
+                return spot;
             }
 
             public double getDistance(){
@@ -33,9 +33,9 @@ public class CommonUtils {
         }
 
         List<Pair> pairs = new ArrayList<Pair>();
-        for(ParkingLot parkingLot : parkingLots){
-            double distance = getDistance(parkingLot.getxDistance(), parkingLot.getyDistance(), x, y);
-            Pair pair = new Pair(parkingLot, distance);
+        for(Spot spot : spots){
+            double distance = getDistance(spot.getxDistance(), spot.getyDistance(), x, y);
+            Pair pair = new Pair(spot, distance);
             pairs.add(pair);
         }
 
@@ -46,9 +46,9 @@ public class CommonUtils {
             }
         });
 
-        List<ParkingLot> selectionOrder = new ArrayList<ParkingLot>();
+        List<Spot> selectionOrder = new ArrayList<Spot>();
         for(Pair pair : pairs){
-            selectionOrder.add(pair.getParkingLot());
+            selectionOrder.add(pair.getSpot());
         }
 
         return selectionOrder;

@@ -1,10 +1,10 @@
 package com.parkinglot.beans;
-public class ParkingLot {
+public class Spot {
     long Id;
     String name;
     String displayName;
     boolean isOccupied = false;
-    ParkingLotType parkingLotType;
+    SpotType spotType;
     long lotPlanId;
     double xDistance;
     double yDistance;
@@ -41,12 +41,12 @@ public class ParkingLot {
         isOccupied = occupied;
     }
 
-    public ParkingLotType getParkingLotType() {
-        return parkingLotType;
+    public SpotType getSpotType() {
+        return spotType;
     }
 
-    public void setParkingLotType(ParkingLotType parkingLotType) {
-        this.parkingLotType = parkingLotType;
+    public void setSpotType(SpotType spotType) {
+        this.spotType = spotType;
     }
 
     public long getLotPlanId() {
@@ -75,7 +75,7 @@ public class ParkingLot {
 
     @Override
     public String toString() {
-        return "ParkingLot{" +
+        return "Spot{" +
                 "Id=" + Id +
                 ", isOccupied=" + isOccupied +
                 ", xDistance=" + xDistance +

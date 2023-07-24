@@ -29,17 +29,17 @@ public class ParkingLotApplication {
         return gate;
     }
 
-    private static ParkingLot createParkingLot(long id, String name, String displayName, boolean occupied, ParkingLotType parkingLotType, long lotPlanId, double xDistance, double yDistance){
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLot.setId(id);
-        parkingLot.setName(name);
-        parkingLot.setDisplayName(displayName);
-        parkingLot.setOccupied(occupied);
-        parkingLot.setParkingLotType(parkingLotType);
-        parkingLot.setLotPlanId(lotPlanId);
-        parkingLot.setxDistance(xDistance);
-        parkingLot.setyDistance(yDistance);
-        return parkingLot;
+    private static Spot createSpot(long id, String name, String displayName, boolean occupied, SpotType spotType, long lotPlanId, double xDistance, double yDistance){
+        Spot spot = new Spot();
+        spot.setId(id);
+        spot.setName(name);
+        spot.setDisplayName(displayName);
+        spot.setOccupied(occupied);
+        spot.setSpotType(spotType);
+        spot.setLotPlanId(lotPlanId);
+        spot.setxDistance(xDistance);
+        spot.setyDistance(yDistance);
+        return spot;
     }
 
     public static Configuration getDefaultPlan(){
@@ -49,7 +49,7 @@ public class ParkingLotApplication {
 
         List<Gate> entryGates = new ArrayList<Gate>();
         List<Gate> exitGates = new ArrayList<Gate>();
-        List<ParkingLot> parkingLots = new ArrayList<>();
+        List<Spot> spots = new ArrayList<>();
 
         LotPlan lotPlan = createLotPlan(1, "lot-plan-1", "Anil Parking Lot");
         configuration.setLotPlan(lotPlan);
@@ -72,12 +72,12 @@ public class ParkingLotApplication {
         for(int i=1; i<5; i++){
             for(int j=1; j<5; j++){
                 String nameSuffix = Integer.toString(idCounter);
-                ParkingLot parkingLot = createParkingLot(idCounter, "parking-lot-"+nameSuffix, "Parking Lot "+nameSuffix, false, ParkingLotType.TWO_WHEELER, 1, j, i);
-                parkingLots.add(parkingLot);
+                Spot spot = createSpot(idCounter, "parking-lot-"+nameSuffix, "Parking Lot "+nameSuffix, false, SpotType.TWO_WHEELER, 1, j, i);
+                spots.add(spot);
                 idCounter++;
             }
         }
-        configuration.setParkingLots(parkingLots);
+        configuration.setSpots(spots);
 
         return configuration;
     }
