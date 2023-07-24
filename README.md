@@ -6,7 +6,7 @@
 
 ## Example Configuration
 > The below is the default configuration used for testing the functionality of the parking lot
-![something](src/main/images/default-configuration.png)
+![something](src/main/images/default-configuration-img.png)
 
 ## Architecture
 > TODO ::: Add a high-level architecture involving all the components
